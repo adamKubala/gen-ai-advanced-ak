@@ -82,6 +82,10 @@ class LLMClient:
         chain = ChatPromptTemplate.from_template(prompt_template) | self.engine
         return chain.invoke(variables)
 
+    async def acomplete(self, prompt_template: str, variables: dict) -> BaseMessage:
+        chain = ChatPromptTemplate.from_template(prompt_template) | self.engine
+        return await chain.ainvoke(variables)
+
     def structured(
         self, prompt_template: str, variables: dict, schema: type[BaseModel]
     ) -> BaseModel:
@@ -101,3 +105,23 @@ class LLMClient:
             return parse_or_repair(result, schema)
 
         return _attempt()
+
+    async def astructured(
+        self, prompt_template: str, variables: dict, schema: type[BaseModel]
+    ) -> BaseModel:
+        @retry(
+            retry=retry_if_exception_type(ValueError),
+            stop=stop_after_attempt(self.max_retries),
+            reraise=True,
+        )
+        async def _attempt() -> BaseModel:
+            structured_engine = self.engine.with_structured_output(
+                schema, include_raw=True
+            )
+            chain = (
+                ChatPromptTemplate.from_template(prompt_template) | structured_engine
+            )
+            result = await chain.ainvoke(variables)
+            return parse_or_repair(result, schema)
+
+        return await _attempt()

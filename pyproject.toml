@@ -8,6 +8,7 @@ dependencies = [
     "json-repair>=0.59.10",
     "langchain-core>=0.3.0",
     "langchain-litellm>=0.2.1",
+    "langgraph>=1.2.5",
     "litellm>=1.86.2",
     "pydantic-settings>=2.14.1",
     "pytest>=9.0.3",

@@ -19,3 +19,11 @@ tasks:
     models:
       - google/gemma-3-12b-it
       - google/gemma-4-26b-a4b-it:free
+
+  intent:
+    temperature: 1.1
+    models:
+      - google/gemma-3-12b-it
+      - google/gemma-4-26b-a4b-it:free
+
+    
