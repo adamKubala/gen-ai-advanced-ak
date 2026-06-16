@@ -24,6 +24,10 @@ class Config(BaseSettings):
         default="openai/text-embedding-3-small",
         validation_alias="EMBEDDING_MODEL",
     )
+    sql_max_limit: int = Field(
+        default=100,
+        validation_alias="SQL_MAX_LIMIT",
+    )
     llm_max_retries: int = Field(
         default=2,
         validation_alias="LLM_MAX_RETRIES",

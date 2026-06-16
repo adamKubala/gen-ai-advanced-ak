@@ -105,6 +105,15 @@ class LLMClient:
             return parse_or_repair(result, schema)
 
         return _attempt()
+    
+    @staticmethod
+    async def aembed(text: str) -> list[float]:
+        cfg = get_config()
+        embeddings = LiteLLMEmbeddings(
+            model=cfg.embedding_model,
+            api_key=cfg.api_key.get_secret_value(),
+        )
+        return await embeddings.aembed_query(text)
 
     async def astructured(
         self, prompt_template: str, variables: dict, schema: type[BaseModel]
