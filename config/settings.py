@@ -19,6 +19,11 @@ class Config(BaseSettings):
     )
 
     api_key: SecretStr = Field(validation_alias="OPEN_ROUTER_API_KEY")
+    database_url: SecretStr = Field(validation_alias="DATABASE_URL")
+    embedding_model: str = Field(
+        default="openai/text-embedding-3-small",
+        validation_alias="EMBEDDING_MODEL",
+    )
     llm_max_retries: int = Field(
         default=2,
         validation_alias="LLM_MAX_RETRIES",
@@ -29,7 +34,7 @@ class Config(BaseSettings):
 class TaskConfig(BaseModel):
     """Model pool and sampling for a single task."""
 
-    temperature: float = Field(ge=0)
+    temperature: float
     models: list[str] = Field(min_length=1)
 
 
